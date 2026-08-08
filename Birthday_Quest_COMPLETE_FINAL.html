@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Birthday Quest ❤️</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+body{background:#090b22;color:#fff;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:
+radial-gradient(circle at 20% 20%,#ff77b733,transparent 25%),
+radial-gradient(circle at 80% 70%,#7c5cff33,transparent 28%),
+linear-gradient(160deg,#090b22,#170d2d 55%,#08152c);z-index:-3}
+.stars{position:fixed;inset:0;z-index:-2;background-image:
+radial-gradient(#fff 1px,transparent 1px),radial-gradient(#ffd9ef 1px,transparent 1px);
+background-size:70px 70px,110px 110px;background-position:10px 20px,40px 60px;opacity:.35;animation:drift 25s linear infinite}
+@keyframes drift{to{background-position:120px 130px,0 0}}
+.app{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:22px}
+.panel{width:min(720px,100%);background:#ffffff0d;border:1px solid #ffffff24;backdrop-filter:blur(18px);border-radius:30px;padding:28px;box-shadow:0 25px 80px #0008;text-align:center}
+.hidden{display:none!important}.small{opacity:.75;font-size:14px}.title{font-family:Georgia,serif;font-size:clamp(34px,9vw,65px);margin:8px 0}.pink{color:#ffb5d6}
+button{border:1px solid #ffffff2c;background:linear-gradient(135deg,#ff6da8,#8b6cff);color:#fff;border-radius:18px;padding:13px 18px;margin:7px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 10px 25px #0003;transition:.2s}
+button:hover{transform:translateY(-3px) scale(1.02)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+input{width:min(420px,100%);padding:15px;border-radius:16px;border:1px solid #ffffff35;background:#ffffff12;color:#fff;text-align:center;font-size:18px;outline:none}
+input::placeholder{color:#ffffff88}
+.orb{width:180px;height:180px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;font-size:78px;background:radial-gradient(circle at 35% 25%,#fff,#ffb7d7 16%,#9a63ff 55%,#322060 75%);box-shadow:0 0 35px #ff83bd88,0 0 100px #825dff55;animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px) rotate(2deg)}}
+.quiz{text-align:left;margin-top:20px}.question{font-size:21px;font-weight:800;margin:15px 0}.option{display:block;width:100%;text-align:left;background:#ffffff10}.correct{background:#2ecc9a!important}.wrong{background:#ff5278!important}
+.progress{height:8px;background:#ffffff16;border-radius:10px;overflow:hidden;margin:18px 0}.bar{height:100%;background:linear-gradient(90deg,#ff6da8,#9a7cff);width:0;transition:.4s}
+.gift{width:190px;height:145px;margin:20px auto;position:relative;cursor:pointer;animation:float 2.5s infinite}
+.gift .base{position:absolute;bottom:0;left:10px;width:170px;height:100px;border-radius:12px 12px 22px 22px;background:linear-gradient(135deg,#ff477f,#8d3cff);box-shadow:0 20px 40px #0005}
+.gift .lid{position:absolute;top:30px;left:0;width:190px;height:42px;border-radius:12px;background:linear-gradient(135deg,#ff8ab4,#a36cff);z-index:2}
+.gift .ribbon{position:absolute;left:82px;top:28px;width:27px;height:115px;background:#ffe7a9;z-index:3;border-radius:5px}
+.gift:after{content:"✨";position:absolute;top:-35px;right:-10px;font-size:35px;animation:twinkle 1s infinite alternate}
+@keyframes twinkle{to{transform:scale(1.35);opacity:.5}}
+.envelope{font-size:100px;margin:10px;animation:float 2s infinite}
+.letter{text-align:left;background:#fffaf5;color:#51253b;border-radius:22px;padding:25px;line-height:1.75;font-family:Georgia,serif;box-shadow:0 20px 50px #0005}
+.reasonCard{min-height:190px;display:grid;place-items:center;padding:25px;border-radius:24px;background:linear-gradient(145deg,#ff7fb0,#7059db);font-size:25px;font-weight:800;box-shadow:0 20px 50px #0005}
+.choice{min-height:80px}.cake{font-size:115px;cursor:pointer;animation:float 2s infinite}.code{font-family:monospace;background:#0005;padding:12px;border-radius:12px}
+#music{position:fixed;right:12px;top:12px;z-index:5}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#111c;color:#fff;padding:12px 18px;border-radius:20px;opacity:0;pointer-events:none;transition:.3s;z-index:20}
+#toast.show{opacity:1}
+.heart{position:fixed;top:-30px;font-size:22px;animation:fall 5s linear forwards;pointer-events:none;z-index:10}@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<button id="music" class="hidden" onclick="toggleMusic()">🎵 Music OFF</button>
+<div id="toast"></div>
+
+<main class="app">
+<section id="s0" class="panel">
+<div class="orb">🎁</div>
+<div class="small">A SECRET BIRTHDAY QUEST</div>
+<h1 class="title">For My <span class="pink">Baby</span> ❤️</h1>
+<p>Ek normal birthday message nahi... aaj tumhe ek little adventure complete karna hoga. 🤭✨</p>
+<p class="small">Password ke bina pehla surprise nahi khulega. 🔐</p>
+<input id="pass" type="password" placeholder="Secret password">
+<br><button onclick="unlock()">🔓 UNLOCK QUEST</button>
+<p id="err" class="small"></p>
+</section>
+
+<section id="s1" class="panel hidden">
+<div class="small">LEVEL 1 / 4</div><h1>🧩 Birthday Quiz</h1>
+<p>Sab answers sahi hue to pehla gift unlock hoga. 😌❤️</p>
+<div class="progress"><div id="bar1" class="bar"></div></div>
+<div id="q1"></div>
+</section>
+
+<section id="s2" class="panel hidden">
+<div class="small">SURPRISE #1 UNLOCKED ✨</div>
+<h1>💌 A Secret Envelope</h1>
+<div class="envelope">💌</div>
+<p>Is envelope ko open karo...</p>
+<button onclick="openLetter()">OPEN MY LETTER</button>
+</section>
+
+<section id="s3" class="panel hidden">
+<div class="letter">
+<h2 style="text-align:center">💌 Happy Birthday, Baby! 🎂❤️</h2>
+<p><b>Happy Birthday to the most special person! 🥹🎂❤️✨</b></p>
+<p>Baby… aaj ka din sirf tumhara hai. 🥹❤️ Tum meri zindagi ki sabse khoobsurat blessings mein se ek ho, jiske liye main har roz Allah ka shukr ada karti hoon. 🤲✨</p>
+<p>Kabhi socha bhi nahi tha ki koi meri life mein aayega aur meri duniya ko itna khoobsurat bana dega… phir tum aaye. 🥹❤️ Tumhari ek smile meri poori duniya roshan kar deti hai. 😊🌸</p>
+<p>Tumhari care, tumhara pyaar aur tumhara mujhe samajhna mere liye bahut precious hai. 🫂❤️ Tum meri khushi ki wajah ho aur tumhari happiness mere liye genuinely bahut matter karti hai. 🤍✨</p>
+<p>Thank you meri life mein aane ke liye, mujhe itna special feel karwane ke liye, meri baaton ko sunne ke liye aur meri chhoti-chhoti khushiyon ka hissa banne ke liye. 🥹💕</p>
+<p>Main dil se dua karti hoon ki Allah tumhe hamesha khush rakhe, sehat aur kamyabi de, tumhari har jaiz dua qubool kare, tumhe har buri nazar aur har pareshani se mehfooz rakhe aur tumhari zindagi ko rehmat, sukoon aur barkat se bhar de. Ameen. 🤲🤍🌙</p>
+<p>Allah tumhare har naye saal ko pichhle saal se bhi zyada khoobsurat banaye, tumhari har mushkil ko aasaan kare aur tumhare chehre ki ye smile hamesha barkarar rakhe. Ameen. 🥹❤️✨</p>
+<p>Bas hamesha aise hi khush rehna, muskurate rehna aur apna khayal rakhna. 😊🫶 Tumhari smile meri favourite cheezon mein se ek hai. ❤️</p>
+<p><b>I love you more than words can ever explain. ♾️❤️🥹</b></p>
+<p style="text-align:center;font-size:20px">“تم میری زندگی کی وہ خوبصورت دعا ہو،<br>جسے مانگ کر دل کو سکون ملتا ہے۔ 🤍<br><br>
+دعا ہے اللہ تمہیں ہمیشہ خوش رکھے،<br>اور تمہاری ہر صبح امید اور محبت سے روشن کرے۔ 🤲✨”</p>
+<p style="text-align:center"><b>Happy Birthday once again, meri jaan! 🎂🎉🎁🥳❤️</b></p>
+<p style="text-align:center"><b>Forever and always… 🤍🌙</b></p>
+</div>
+<button onclick="go('s5')">NEXT SURPRISE ✨</button>
+</section>
+
+<section id="s5" class="panel hidden">
+<div class="small">SURPRISE #2 UNLOCKED 💖</div>
+<h1>💗 100 Reasons</h1>
+<p>Har click par ek reason reveal hoga.</p>
+<div id="reason" class="reasonCard">Tap “REVEAL” ❤️</div>
+<p id="rnum">0 / 100</p>
+<button onclick="nextReason()">REVEAL ❤️</button>
+<button id="reasonNext" class="hidden" onclick="go('s6')">NEXT LEVEL ✨</button>
+</section>
+
+<section id="s6" class="panel hidden">
+<div class="small">LEVEL 3 / 4</div><h1>🎀 Pick One</h1>
+<p>Sirf ek choose karna hai... 🤭</p>
+<div>
+<button class="choice" onclick="choice('hug')">🫂 A Big Hug</button>
+<button class="choice" onclick="choice('cake')">🎂 Birthday Cake</button>
+<button class="choice" onclick="choice('letter')">💌 One More Letter</button>
+</div>
+<p id="choiceResult"></p>
+<button id="choiceNext" class="hidden" onclick="go('s7')">UNLOCK NEXT 🎁</button>
+</section>
+
+<section id="s7" class="panel hidden">
+<div class="small">SURPRISE #3 🌙</div>
+<h1>🥀 A Little Poetry</h1>
+<div class="letter" style="text-align:center">
+<p style="font-size:22px">تم میری زندگی کا سب سے خوبصورت باب ہو،<br>
+تمہاری مسکراہٹ میری خوشی کا سبب ہو۔ ❤️<br><br>
+دعا ہے اللہ تمہیں ہمیشہ خوش رکھے،<br>
+اور تمہارا ہر دن محبت سے روشن رکھے۔ 🤲✨</p>
+</div>
+<button onclick="go('s8')">FINAL LEVEL 🎂</button>
+</section>
+
+<section id="s8" class="panel hidden">
+<div class="small">LEVEL 4 / 4</div><h1>🎂 Make A Wish</h1>
+<p>Last surprise ke liye candle ko tap karo. 🕯️</p>
+<div id="cake" class="cake" onclick="blow()">🎂</div>
+<p id="cakeText">One last click... ✨</p>
+</section>
+
+<section id="s9" class="panel hidden">
+<div class="orb">💖</div>
+<div class="small">QUEST COMPLETE</div>
+<h1 class="title">You Unlocked <span class="pink">My Heart</span> 🥹</h1>
+<div class="letter">
+<p><b>Baby... 🤍</b></p>
+<p>Ye chhota sa surprise tumhare liye tha, kyunki tum mere liye bahut special ho. 🥹❤️</p>
+<p>Allah tumhe hamesha apni hifazat mein rakhe, tumhari har dua qubool kare aur tumhari zindagi ko khushiyon, sukoon aur barkat se bhar de. Ameen. 🤲✨</p>
+<p>Bas hamesha aise hi muskurate rehna. 😊❤️ Tumhari smile meri favourite wajah-e-khushi hai.</p>
+<p style="text-align:center"><b>Happy Birthday, Baby! 🎂🎈❤️</b><br><br>
+<b>Forever and always... 🤍🌙</b></p>
+</div>
+</section>
+</main>
+
+<script>
+const screens=[...document.querySelectorAll('.panel')];
+function go(id){screens.forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo(0,0)}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1600)}
+function hearts(n=30){for(let i=0;i<n;i++){let h=document.createElement('div');h.className='heart';h.textContent=['❤️','💖','✨','💕','🌸'][Math.floor(Math.random()*5)];h.style.left=Math.random()*100+'vw';h.style.animationDelay=Math.random()*1.8+'s';document.body.appendChild(h);setTimeout(()=>h.remove(),6000)}}
+
+let ac=null,master=null,mTimer=null,mOn=false;
+function audio(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.025;master.connect(ac.destination)}if(ac.state==='suspended')ac.resume()}
+function note(f,d=.9){audio();let o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(.2,ac.currentTime+.05);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(master);o.start();o.stop(ac.currentTime+d+.03)}
+function startMusic(){if(mOn)return;mOn=true;audio();let ns=[261.63,329.63,392,329.63,293.66,349.23,440,349.23],i=0;mTimer=setInterval(()=>note(ns[i++%ns.length]),900);document.getElementById('music').textContent='🎵 Music ON'}
+function toggleMusic(){if(mOn){mOn=false;clearInterval(mTimer);document.getElementById('music').textContent='🎵 Music OFF'}else startMusic()}
+
+function unlock(){if(document.getElementById('pass').value.toLowerCase()==='baby'){go('s1');document.getElementById('music').classList.remove('hidden');startMusic();hearts(35);loadQuiz(quiz1,'q1','bar1',()=>go('s2'))}else document.getElementById('err').textContent='🤭 Hint: The sweetest name you call me.'}
+
+const quiz1=[
+['Agar main tumse naraz ho jaun, tumhe kya karna chahiye? 🤭',['Mujhe ignore karna 😂','Mujhe manana 🥹❤️','Khud naraz ho jaana 😭'],1],
+['Mere liye tumhari smile kya hai? 😊',['Normal','Meri favourite cheez ❤️','Funny 😂'],1],
+['Tumhara birthday mere liye kya hai? 🎂',['Normal day','Ek special day ❤️','Holiday 😂'],1],
+['Main tumhe surprise kyun de rahi hoon? 🎁',['Timepass 😂','Kyunki tum special ho 🥹❤️','Mujhe gift chahiye 😭'],1]
+];
+function loadQuiz(data,id,barId,done){let i=0,box=document.getElementById(id),bar=document.getElementById(barId);
+function render(){let q=data[i];bar.style.width=(i/data.length*100)+'%';box.innerHTML='<div class="quiz"><div class="question">'+(i+1)+'. '+q[0]+'</div>'+q[1].map((o,k)=>`<button class="option" onclick="ans(${k})">${o}</button>`).join('')+'</div>';window.currentAns=(k)=>{}}
+window.ans=function(k){let q=data[i];if(k===q[2]){toast('Correct! ❤️');hearts(10);i++;if(i>=data.length){bar.style.width='100%';setTimeout(done,500)}else render()}else{toast('Oops 🤭 Try again!');}}
+render()}
+function openLetter(){go('s3');hearts(20)}
+
+const reasons=[
+'Because you make me smile. 😊❤️','Because you care about me. 🫂🤍','Because you make me feel special. ❤️','Because your smile is my favourite. 😊','Because talking to you makes my day better. ☀️',
+'Because you listen to me. 🥹','Because you understand me. 🤍','Because you support me. 🤝','Because you make me feel loved. 💕','Because you make ordinary moments special. ✨',
+'Because you make me laugh. 😂','Because you respect me. 🌸','Because you remember little things. 💕','Because you are patient with me. 🤍','Because you make me feel important. ❤️',
+'Because your kindness inspires me. 🌼','Because you are genuine. 🤍','Because you are thoughtful. 🫶','Because you are caring. ❤️','Because you bring peace to my heart. 🌙',
+'Because you make me feel safe. 🫂','Because I can be myself with you. 🤍','Because you believe in me. ❤️','Because you encourage me. ✨','Because you make me feel lucky. 🥹',
+'Because you are my favourite notification. 📱❤️','Because your voice makes me happy. 🎧','Because your messages make me smile. 😊','Because you make every day brighter. ☀️','Because you have a beautiful heart. 🤍',
+'Because you make me excited about the future. 🌸','Because I trust you. ❤️','Because you value what we have. 🫶','Because you always try your best. ✨','Because you make me feel understood. 🥹',
+'Because your happiness matters to me. 💕','Because you make my heart happy. ❤️','Because you are my comfort person. 🫂','Because you are my favourite person. 🤍',
+'Because you make me blush. 🤭','Because you are sweet. 🌷','Because you are adorable. 🥹','Because you make life more beautiful. 🌸','Because you are always in my prayers. 🤲',
+'Because I thank Allah for you. 🤍','Because you are a beautiful blessing. ✨','Because you inspire me to be better. 🌱','Because you make my heart smile. ❤️','Because you make me feel cherished. 🫂',
+'Because you are worth every dua. 🤲','Because you make me believe in beautiful things. ✨','Because you make me feel understood without many words. 🤍','Because you make me happy in little ways. 😊','Because you make me feel remembered. ❤️',
+'Because you make my favourite memories. 📖','Because you are my favourite chapter. 🌙','Because you make me feel appreciated. 🫶','Because you make me feel hopeful. ✨','Because you bring warmth to my heart. ❤️',
+'Because you are someone I genuinely care for. 🤍','Because your happiness makes me happy. 😊','Because I love hearing about your day. 💕','Because I love sharing little things with you. 🌸','Because you make conversations special. ❤️',
+'Because you make me feel valued. 🥹','Because you make me smile at my phone. 🤭📱','Because you make my days softer. 🤍','Because you matter so much. ❤️','Because you make my heart feel full. 🫂',
+'Because you make me want to keep growing. 🌱','Because you make me proud. ❤️','Because you deserve happiness. 🤲','Because you deserve beautiful moments. ✨','Because you deserve all the good things. 🌸',
+'Because I love your heart. 🤍','Because I love your kindness. ❤️','Because I love your sincerity. 🫶','Because I love the way you care. 🥹','Because I love the way you make me laugh. 😂',
+'Because I love our little conversations. 💕','Because I love our memories. 📖','Because I love the way you make me feel. 🤍','Because I love having you in my life. ❤️','Because I love making you smile. 😊',
+'Because I love praying for you. 🤲','Because I love celebrating you. 🎂','Because I love seeing you happy. 🥹','Because you are one of my favourite blessings. ❤️','Because I choose you with all my heart. 🤍',
+'Because I want to keep making beautiful memories. ✨','Because I want to see you happy always. ❤️','Because I want to celebrate many more birthdays with you. 🎂','Because I want to keep cheering for you. 🫶','Because I want the best for you. 🤲',
+'Because you make my world brighter. ☀️','Because you make my heart feel at home. 🏡❤️','Because you are simply you—and that is enough. 🥹🤍','Because I love you. ❤️♾️',
+'Because today is all about celebrating the wonderful person you are. 🎂❤️',
+'Because no list could ever fully explain how special you are to me. 🥹💖'
+];
+let ri=0;function nextReason(){if(ri<reasons.length){document.getElementById('reason').textContent=reasons[ri];ri++;document.getElementById('rnum').textContent=ri+' / 100';hearts(3);if(ri===100){document.getElementById('reasonNext').classList.remove('hidden');toast('All 100 unlocked! 🥹❤️')}}}
+function choice(x){let t={hug:'Correct choice! 🫂❤️ Your hug has been added to the surprise.',cake:'Cake unlocked! 🎂❤️ One slice reserved for you.',letter:'Letter unlocked! 💌❤️ You really know how to choose.'}[x];document.getElementById('choiceResult').textContent=t;document.getElementById('choiceNext').classList.remove('hidden');hearts(10)}
+function blow(){document.getElementById('cake').textContent='🌟';document.getElementById('cakeText').textContent='Wish made! ✨ Now open your final surprise... ❤️';hearts(45);note(1046,.7);setTimeout(()=>go('s9'),1800)}
+</script>
+</body>
+</html>
